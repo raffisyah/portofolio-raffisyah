@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Portofolio Pribadi</title>
   <meta name="description" content="Website portofolio pribadi: profil, pendidikan, pengalaman, keahlian, karya, prestasi, dan rencana masa depan.">
-  <meta name="theme-color" content="#060912">
+  <meta name="theme-color" content="#080f1e">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Portofolio Pribadi">
   <meta property="og:description" content="Profil, karya, prestasi, dan perjalanan saya.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="style.css">
   <script src="config.js"></script>
@@ -56,7 +56,6 @@
     </defs>
   </svg>
 
-  <div class="ambient" aria-hidden="true"><div class="orb a"></div><div class="orb b"></div></div>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
   <a class="skip-link" href="#main">Lompat ke konten</a>
@@ -73,17 +72,14 @@
       </a>
 
       <nav class="nav-pill" id="navPill" aria-label="Navigasi utama">
-        <span class="nav-ind" id="navInd" aria-hidden="true"></span>
         <a href="#beranda" data-sec="beranda">Beranda</a>
-        <a href="#tentang" data-sec="tentang">Tentang</a>
-        <a href="#keahlian" data-sec="keahlian">Keahlian</a>
         <a href="#karya" data-sec="karya">Karya</a>
-        <a href="#prestasi" data-sec="prestasi">Prestasi</a>
+        <a href="#tentang" data-sec="tentang">Tentang</a>
         <a href="#kontak" data-sec="kontak">Kontak</a>
+        <span class="nav-ind" id="navInd" aria-hidden="true"></span>
       </nav>
 
       <div class="header-actions">
-        <a class="btn btn-outline btn-sm cta-head" href="#kontak">Hubungi Saya</a>
         <button class="icon-btn" id="searchBtn" type="button" aria-label="Cari di seluruh website" title="Cari ( / )">
           <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
         </button>
@@ -103,13 +99,13 @@
     <button class="icon-btn menu-close" id="menuClose" type="button" aria-label="Tutup menu"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
     <nav class="menu-list" aria-label="Semua bagian">
       <a href="#beranda" data-sec="beranda"><span>Beranda</span></a>
+      <a href="#karya" data-sec="karya"><span>Portofolio Karya</span></a>
+      <a href="#prestasi" data-sec="prestasi"><span>Prestasi dan Sertifikat</span></a>
+      <a href="#proyek" data-sec="proyek"><span>Proyek</span></a>
       <a href="#tentang" data-sec="tentang"><span>Tentang Saya</span></a>
       <a href="#pendidikan" data-sec="pendidikan"><span>Pendidikan</span></a>
       <a href="#pengalaman" data-sec="pengalaman"><span>Pengalaman</span></a>
       <a href="#keahlian" data-sec="keahlian"><span>Keahlian</span></a>
-      <a href="#karya" data-sec="karya"><span>Portofolio Karya</span></a>
-      <a href="#prestasi" data-sec="prestasi"><span>Prestasi dan Sertifikat</span></a>
-      <a href="#proyek" data-sec="proyek"><span>Proyek</span></a>
       <a href="#target" data-sec="target"><span>Perjalanan dan Target</span></a>
       <a href="#kontak" data-sec="kontak"><span>Kontak</span></a>
     </nav>
@@ -119,11 +115,13 @@
     <!-- BERANDA -->
     <section id="beranda" class="hero-section">
       <div class="container hero" id="heroGrid">
-        <div class="hero-text">
+        <div class="hero-head">
           <p class="badge-live" id="heroBadge" data-s style="--i:0" hidden></p>
           <p class="hello" data-s style="--i:1">Halo, saya</p>
           <h1 id="heroName">Memuat…</h1>
           <p class="tagline" id="heroTagline" data-s style="--i:5"></p>
+        </div>
+        <div class="hero-body">
           <div class="hero-intro" id="heroIntro" data-s style="--i:6"></div>
           <div class="hero-cta" data-s style="--i:7">
             <a class="btn btn-primary" href="#karya">Lihat Karya <svg class="ic arr" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
@@ -132,62 +130,13 @@
           </div>
           <ul class="social" id="heroSocial" data-s style="--i:8" aria-label="Media sosial"></ul>
         </div>
-
         <div class="hero-visual" id="heroVisual">
-          <div class="vis-glow" aria-hidden="true"></div>
-          <div class="ring" aria-hidden="true"></div>
-          <div class="ring r2" aria-hidden="true"></div>
-          <div class="photo" id="heroPhoto"></div>
+          <figure class="frame f-photo" id="heroPhoto" style="--i:0"></figure>
+          <figure class="frame f-a" id="heroFrameA" style="--i:1"></figure>
+          <figure class="frame f-b" id="heroFrameB" style="--i:2"></figure>
         </div>
       </div>
-      <a class="scroll-cue" href="#tentang" aria-label="Gulir ke bawah"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
-    </section>
-
-    <!-- TENTANG -->
-    <section id="tentang" class="section">
-      <div class="container about">
-        <div class="about-main">
-          <header class="head" data-r>
-            <h2>Tentang Saya</h2>
-          </header>
-          <div class="story" id="aboutStory" data-r></div>
-          <ul class="stats" id="aboutStats"></ul>
-        </div>
-        <div class="bento" id="aboutBento"></div>
-      </div>
-    </section>
-
-    <!-- PENDIDIKAN -->
-    <section id="pendidikan" class="section">
-      <div class="container">
-        <header class="head" data-r>
-          <h2>Pendidikan</h2>
-          <p class="lead">Tempat saya belajar dan hal yang saya bawa dari sana.</p>
-        </header>
-        <div id="eduBody"></div>
-      </div>
-    </section>
-
-    <!-- PENGALAMAN -->
-    <section id="pengalaman" class="section">
-      <div class="container">
-        <header class="head" data-r>
-          <h2>Pengalaman</h2>
-          <p class="lead">Organisasi, kepemimpinan, kegiatan pondok, dan kepanitiaan.</p>
-        </header>
-        <div id="expBody"></div>
-      </div>
-    </section>
-
-    <!-- KEAHLIAN -->
-    <section id="keahlian" class="section">
-      <div class="container">
-        <header class="head" data-r>
-          <h2>Keahlian</h2>
-          <p class="lead">Kemampuan yang saya kuasai dan terus saya asah.</p>
-        </header>
-        <div id="skillBody"></div>
-      </div>
+      <a class="scroll-cue" href="#karya" aria-label="Gulir ke karya"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
     </section>
 
     <!-- KARYA -->
@@ -223,8 +172,55 @@
       </div>
     </section>
 
+    <!-- TENTANG -->
+    <section id="tentang" class="section">
+      <div class="container about">
+        <div class="about-main">
+          <header class="head" data-r>
+            <h2>Tentang Saya</h2>
+          </header>
+          <div class="story" id="aboutStory" data-r></div>
+          <ul class="stats" id="aboutStats"></ul>
+        </div>
+        <div class="bento" id="aboutBento"></div>
+      </div>
+    </section>
+
+    <!-- PENDIDIKAN -->
+    <section id="pendidikan" class="section split">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Pendidikan</h2>
+          <p class="lead">Tempat saya belajar dan hal yang saya bawa dari sana.</p>
+        </header>
+        <div id="eduBody"></div>
+      </div>
+    </section>
+
+    <!-- PENGALAMAN -->
+    <section id="pengalaman" class="section split">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Pengalaman</h2>
+          <p class="lead">Organisasi, kepemimpinan, kegiatan pondok, dan kepanitiaan.</p>
+        </header>
+        <div id="expBody"></div>
+      </div>
+    </section>
+
+    <!-- KEAHLIAN -->
+    <section id="keahlian" class="section split">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Keahlian</h2>
+          <p class="lead">Kemampuan yang saya kuasai dan terus saya asah.</p>
+        </header>
+        <div id="skillBody"></div>
+      </div>
+    </section>
+
     <!-- TARGET -->
-    <section id="target" class="section">
+    <section id="target" class="section split">
       <div class="container">
         <header class="head" data-r>
           <h2>Perjalanan dan Target</h2>
@@ -242,7 +238,7 @@
           <p class="lead">Ada beasiswa, lomba, kolaborasi, atau pekerjaan freelance? Tulis pesan atau hubungi saya langsung.</p>
           <div id="contactBody"></div>
         </div>
-        <form class="glass contact-form" id="contactForm" data-r novalidate hidden>
+        <form class="contact-form" id="contactForm" data-r novalidate hidden>
           <div class="field"><label for="cfName">Nama</label><input id="cfName" name="name" type="text" autocomplete="name" required maxlength="80"></div>
           <div class="field"><label for="cfEmail">Email Anda</label><input id="cfEmail" name="email" type="email" autocomplete="email" maxlength="120"></div>
           <div class="field"><label for="cfMsg">Pesan</label><textarea id="cfMsg" name="msg" rows="5" required maxlength="1500"></textarea></div>

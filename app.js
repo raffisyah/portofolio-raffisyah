@@ -14,7 +14,6 @@
   var splitLines = function (t) { return String(t == null ? "" : t).split(/\n+/).map(val).filter(Boolean); };
   var root = document.documentElement;
   var RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var FINE = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   function icon(name, cls) { return '<svg class="ic' + (cls ? " " + cls : "") + '" aria-hidden="true"><use href="#i-' + name + '"/></svg>'; }
 
@@ -295,7 +294,7 @@
 
   function renderWorks(list) {
     collection($("#workBody"), {
-      items: list, route: "karya", empty: "Karya belum ditambahkan.", placeholder: "Cari karya", limit: 6,
+      items: list, route: "karya", empty: "Karya belum ditambahkan.", placeholder: "Cari karya", limit: 5,
       catOf: function (w) { return w.category; },
       textOf: function (w) { return [w.title, w.category, w.year, w.description, w.tags, w.tools].join(" "); },
       render: function (ls) { return '<div class="grid">' + ls.map(workCard).join("") + "</div>"; }
@@ -303,7 +302,7 @@
   }
   function renderAchievements(list) {
     collection($("#achBody"), {
-      items: list, route: "prestasi", empty: "Prestasi belum ditambahkan.", placeholder: "Cari prestasi", limit: 6,
+      items: list, route: "prestasi", empty: "Prestasi belum ditambahkan.", placeholder: "Cari prestasi", limit: 5,
       catOf: function (a) { return a.type; },
       textOf: function (a) { return [a.title, a.issuer, a.type, a.year, a.result, a.description].join(" "); },
       render: function (ls) { return '<div class="grid">' + ls.map(achCard).join("") + "</div>"; }
@@ -311,7 +310,7 @@
   }
   function renderProjects(list) {
     collection($("#projBody"), {
-      items: list, route: "proyek", empty: "Proyek belum ditambahkan.", placeholder: "Cari proyek", limit: 6,
+      items: list, route: "proyek", empty: "Proyek belum ditambahkan.", placeholder: "Cari proyek", limit: 5,
       catOf: function (p) { return p.type; },
       textOf: function (p) { return [p.title, p.type, p.status, p.description, p.tags].join(" "); },
       render: function (ls) { return '<div class="grid">' + ls.map(projCard).join("") + "</div>"; }
@@ -336,7 +335,7 @@
     host.innerHTML = '<div class="contact-links">' + list.map(function (c) {
       var plat = PLATFORMS[c.platform] || PLATFORMS.lainnya, info = contactInfo(c);
       if (!info.href) return "";
-      return '<a class="contact-chip" href="' + esc(info.href) + '" target="_blank" rel="noopener noreferrer">' + icon(plat[1]) + "<span>" + esc(val(c.label) || plat[0]) + "</span></a>";
+      return '<a class="contact-chip" href="' + esc(info.href) + '" target="_blank" rel="noopener noreferrer">' + icon(plat[1]) + "<span>" + esc(val(c.label) || plat[0]) + "</span><small>" + esc(info.shown) + "</small></a>";
     }).join("") + "</div>";
 
     mailTo = ""; waBase = "";
@@ -542,7 +541,8 @@
      8. NAVIGASI, MENU, ANIMASI
      --------------------------------------------------------------- */
   var menuOpen = false;
-  var PRIMARY = { beranda: "beranda", tentang: "tentang", pendidikan: "tentang", pengalaman: "tentang", keahlian: "keahlian", karya: "karya", prestasi: "prestasi", proyek: "prestasi", target: "prestasi", kontak: "kontak" };
+  // 4 tautan utama di navbar; bagian lain ikut menyalakan induknya
+  var PRIMARY = { beranda: "beranda", karya: "karya", prestasi: "karya", proyek: "karya", tentang: "tentang", pendidikan: "tentang", pengalaman: "tentang", keahlian: "tentang", target: "tentang", kontak: "kontak" };
   var currentSec = "beranda";
 
   function positionIndicator() {
@@ -613,13 +613,12 @@
   }
 
   function setupScroll() {
-    var header = $(".site-header"), prog = $("#progress"), vis = $("#heroVisual"), ticking = false;
+    var header = $(".site-header"), prog = $("#progress"), ticking = false;
     function frame() {
       ticking = false;
       var y = window.scrollY, max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       header.classList.toggle("scrolled", y > 24);
       prog.style.transform = "scaleX(" + Math.min(1, y / max) + ")";
-      if (!RM && y < 900) vis.style.setProperty("--py", (y * -0.07).toFixed(1) + "px");
     }
     window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
     frame();
@@ -637,36 +636,37 @@
     $("#themeBtn").addEventListener("click", window.toggleTheme);
   }
 
-  function setupPointerFx() {
-    if (!FINE || RM) return;
-    // spotlight kartu
-    document.addEventListener("pointermove", function (e) {
-      var t = e.target.closest && e.target.closest("[data-spot]");
-      if (!t) return;
-      var r = t.getBoundingClientRect();
-      t.style.setProperty("--mx", (e.clientX - r.left) + "px");
-      t.style.setProperty("--my", (e.clientY - r.top) + "px");
-    }, { passive: true });
-    // kemiringan halus foto hero
-    var hero = $("#beranda"), vis = $("#heroVisual"), raf = 0;
-    hero.addEventListener("pointermove", function (e) {
-      if (raf) return;
-      raf = requestAnimationFrame(function () {
-        raf = 0;
-        var r = hero.getBoundingClientRect();
-        var nx = (e.clientX - r.left) / r.width - .5, ny = (e.clientY - r.top) / r.height - .5;
-        vis.style.setProperty("--ry", (nx * 6).toFixed(2) + "deg");
-        vis.style.setProperty("--rx", (-ny * 5).toFixed(2) + "deg");
-      });
+  /* Kolase hero: foto profil + dua karya (hanya yang punya gambar). Tanpa data, tampil bingkai grafis polos. */
+  function renderCollage(d) {
+    var works = (d.works || []).filter(function (w) { return safeUrl(w.image_url); }).slice(0, 2);
+    [{ el: $("#heroFrameA"), ph: "ph-hatch" }, { el: $("#heroFrameB"), ph: "ph-accent" }].forEach(function (s, i) {
+      var el = s.el, w = works[i];
+      el.classList.remove("has-img", "ph-hatch", "ph-accent");
+      el.style.removeProperty("--img");
+      if (w) {
+        var u = safeUrl(w.image_url);
+        el.classList.add("has-img");
+        el.style.setProperty("--img", "url('" + cssUrl(u) + "')");
+        el.removeAttribute("aria-hidden");
+        el.innerHTML = '<button type="button" class="frame-btn" data-hero-work="' + esc(w.id) + '" aria-label="Buka karya ' + esc(w.title) + '">' +
+          '<img src="' + esc(u) + '" alt="" decoding="async"><span class="cap">' + esc(w.title) + "</span></button>";
+      } else {
+        el.classList.add(s.ph);
+        el.setAttribute("aria-hidden", "true");
+        el.innerHTML = i === 1 ? icon("arrow-ur") : "";
+      }
     });
-    hero.addEventListener("pointerleave", function () { vis.style.setProperty("--ry", "0deg"); vis.style.setProperty("--rx", "0deg"); });
+    guardImages($("#heroVisual"));
   }
 
   /* ---------------------------------------------------------------
      9. MULAI
      --------------------------------------------------------------- */
   async function init() {
-    setupDetail(); setupSearch(); setupMenu(); setupScroll(); setupPointerFx(); setupContactForm();
+    setupDetail(); setupSearch(); setupMenu(); setupScroll(); setupContactForm();
+    $("#heroVisual").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-hero-work]"); if (b) goDetail("karya", b.dataset.heroWork);
+    });
     observeReveal(document);
 
     var res = await loadData();
@@ -674,6 +674,7 @@
     $("#demoBar").hidden = !DEMO;
 
     renderHero(DATA.profile || {}, DATA.contact_links || []);
+    renderCollage(DATA);
     renderAbout(DATA.profile || {}, DATA);
     renderEducation(DATA.education || []);
     renderExperience(DATA.experiences || []);

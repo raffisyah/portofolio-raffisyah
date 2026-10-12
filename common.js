@@ -25,7 +25,7 @@
 
   function syncThemeColor(theme) {
     var m = document.querySelector('meta[name="theme-color"]');
-    if (m) m.setAttribute("content", theme === "dark" ? "#060912" : "#f5f6fc");
+    if (m) m.setAttribute("content", theme === "dark" ? "#080f1e" : "#eef3fb");
   }
   document.addEventListener("DOMContentLoaded", function () { syncThemeColor(root.getAttribute("data-theme")); });
 
