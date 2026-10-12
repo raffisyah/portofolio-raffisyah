@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Portofolio Pribadi</title>
+  <meta name="description" content="Website portofolio pribadi: profil, pendidikan, pengalaman, keahlian, karya, prestasi, dan rencana masa depan.">
+  <meta name="theme-color" content="#060912">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Portofolio Pribadi">
+  <meta property="og:description" content="Profil, karya, prestasi, dan perjalanan saya.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+  <script src="common.js"></script>
+</head>
+<body>
+  <!-- Kumpulan ikon (dipakai lewat <use href="#i-...">) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+      <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
+      <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".7" fill="currentColor"/></symbol>
+      <symbol id="i-youtube" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.5 5 2.5-5 2.5z" fill="currentColor"/></symbol>
+      <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M10 17.5V5.5l6 1.6v3.1"/><circle cx="7.5" cy="17.5" r="2.5"/></symbol>
+      <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 20l1.4-4.2A8 8 0 1 1 8.4 18.7z"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol>
+      <symbol id="i-linkedin" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 11v5M8 8v.01M12 16v-5M12 13a2.5 2.5 0 0 1 5 0v3"/></symbol>
+      <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M14 8.5h2.5V5H14a3.5 3.5 0 0 0-3.5 3.5V10H8v3.5h2.5V20H14v-6.5h2.5L17 10h-3z"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M5 4l14 16M19 4 5 20"/></symbol>
+      <symbol id="i-dribbble" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5 8c5 1 10 .5 14-2M4 13c6-1 11 1 14 6M9 3.5c3 3 4.5 8 4 17"/></symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 1.6-2-.5-1.2.2-2.5 1.6-2.5H17a4 4 0 0 0 4-4c0-5-4-9.5-9-9.5z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5zM4 19V5.5"/></symbol>
+      <symbol id="i-lang" viewBox="0 0 24 24"><path d="M4 6h9M8.5 4v2M6 6c.5 3 2.5 5.5 5.5 7M11 6c-.5 3-2.5 5.5-6 7.5M14 20l4-9 4 9M15.2 17.5h5.6"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></symbol>
+      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-5 4 4 3-3 4 4"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.6 7-11a7 7 0 0 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="ambient" aria-hidden="true"><div class="orb a"></div><div class="orb b"></div></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <a class="skip-link" href="#main">Lompat ke konten</a>
+
+  <div id="demoBar" class="demo-bar" hidden>
+    Menampilkan <strong>konten contoh</strong>: Supabase belum tersambung atau gagal dimuat. Lihat PANDUAN.
+  </div>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#beranda" aria-label="Ke beranda">
+        <span class="brand-mark" id="brandMark">•</span>
+        <span class="brand-name" id="brandName">Portofolio</span>
+      </a>
+
+      <nav class="nav-pill" id="navPill" aria-label="Navigasi utama">
+        <span class="nav-ind" id="navInd" aria-hidden="true"></span>
+        <a href="#beranda" data-sec="beranda">Beranda</a>
+        <a href="#tentang" data-sec="tentang">Tentang</a>
+        <a href="#keahlian" data-sec="keahlian">Keahlian</a>
+        <a href="#karya" data-sec="karya">Karya</a>
+        <a href="#prestasi" data-sec="prestasi">Prestasi</a>
+        <a href="#kontak" data-sec="kontak">Kontak</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="btn btn-outline btn-sm cta-head" href="#kontak">Hubungi Saya</a>
+        <button class="icon-btn" id="searchBtn" type="button" aria-label="Cari di seluruh website" title="Cari ( / )">
+          <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+        </button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Ganti mode terang atau gelap" title="Mode terang/gelap">
+          <svg class="ic i-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="ic i-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+        <button class="icon-btn" id="menuBtn" type="button" aria-label="Buka semua bagian" aria-expanded="false" aria-controls="menuOverlay" title="Semua bagian">
+          <svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu layar penuh: semua bagian website -->
+  <div class="menu-overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="Semua bagian website" hidden>
+    <button class="icon-btn menu-close" id="menuClose" type="button" aria-label="Tutup menu"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <nav class="menu-list" aria-label="Semua bagian">
+      <a href="#beranda" data-sec="beranda"><span>Beranda</span></a>
+      <a href="#tentang" data-sec="tentang"><span>Tentang Saya</span></a>
+      <a href="#pendidikan" data-sec="pendidikan"><span>Pendidikan</span></a>
+      <a href="#pengalaman" data-sec="pengalaman"><span>Pengalaman</span></a>
+      <a href="#keahlian" data-sec="keahlian"><span>Keahlian</span></a>
+      <a href="#karya" data-sec="karya"><span>Portofolio Karya</span></a>
+      <a href="#prestasi" data-sec="prestasi"><span>Prestasi dan Sertifikat</span></a>
+      <a href="#proyek" data-sec="proyek"><span>Proyek</span></a>
+      <a href="#target" data-sec="target"><span>Perjalanan dan Target</span></a>
+      <a href="#kontak" data-sec="kontak"><span>Kontak</span></a>
+    </nav>
+  </div>
+
+  <main id="main">
+    <!-- BERANDA -->
+    <section id="beranda" class="hero-section">
+      <div class="container hero" id="heroGrid">
+        <div class="hero-text">
+          <p class="badge-live" id="heroBadge" data-s style="--i:0" hidden></p>
+          <p class="hello" data-s style="--i:1">Halo, saya</p>
+          <h1 id="heroName">Memuat…</h1>
+          <p class="tagline" id="heroTagline" data-s style="--i:5"></p>
+          <div class="hero-intro" id="heroIntro" data-s style="--i:6"></div>
+          <div class="hero-cta" data-s style="--i:7">
+            <a class="btn btn-primary" href="#karya">Lihat Karya <svg class="ic arr" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+            <a class="btn btn-outline" href="#kontak">Hubungi Saya <svg class="ic arr" aria-hidden="true"><use href="#i-mail"/></svg></a>
+            <a class="btn btn-outline" id="cvBtn" href="#" target="_blank" rel="noopener noreferrer" hidden>Unduh CV <svg class="ic" aria-hidden="true"><use href="#i-download"/></svg></a>
+          </div>
+          <ul class="social" id="heroSocial" data-s style="--i:8" aria-label="Media sosial"></ul>
+        </div>
+
+        <div class="hero-visual" id="heroVisual">
+          <div class="vis-glow" aria-hidden="true"></div>
+          <div class="ring" aria-hidden="true"></div>
+          <div class="ring r2" aria-hidden="true"></div>
+          <div class="photo" id="heroPhoto"></div>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#tentang" aria-label="Gulir ke bawah"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
+    </section>
+
+    <!-- TENTANG -->
+    <section id="tentang" class="section">
+      <div class="container about">
+        <div class="about-main">
+          <header class="head" data-r>
+            <h2>Tentang Saya</h2>
+          </header>
+          <div class="story" id="aboutStory" data-r></div>
+          <ul class="stats" id="aboutStats"></ul>
+        </div>
+        <div class="bento" id="aboutBento"></div>
+      </div>
+    </section>
+
+    <!-- PENDIDIKAN -->
+    <section id="pendidikan" class="section">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Pendidikan</h2>
+          <p class="lead">Tempat saya belajar dan hal yang saya bawa dari sana.</p>
+        </header>
+        <div id="eduBody"></div>
+      </div>
+    </section>
+
+    <!-- PENGALAMAN -->
+    <section id="pengalaman" class="section">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Pengalaman</h2>
+          <p class="lead">Organisasi, kepemimpinan, kegiatan pondok, dan kepanitiaan.</p>
+        </header>
+        <div id="expBody"></div>
+      </div>
+    </section>
+
+    <!-- KEAHLIAN -->
+    <section id="keahlian" class="section">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Keahlian</h2>
+          <p class="lead">Kemampuan yang saya kuasai dan terus saya asah.</p>
+        </header>
+        <div id="skillBody"></div>
+      </div>
+    </section>
+
+    <!-- KARYA -->
+    <section id="karya" class="section">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Karya Pilihan</h2>
+          <p class="lead">Desain, ilustrasi, video, tulisan, pidato, terjemahan, dan dokumentasi. Ketuk kartu untuk melihat detail.</p>
+        </header>
+        <div id="workBody"></div>
+      </div>
+    </section>
+
+    <!-- PRESTASI -->
+    <section id="prestasi" class="section">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Prestasi dan Sertifikat</h2>
+          <p class="lead">Lomba, penghargaan, dan sertifikat yang pernah saya raih.</p>
+        </header>
+        <div id="achBody"></div>
+      </div>
+    </section>
+
+    <!-- PROYEK -->
+    <section id="proyek" class="section">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Proyek</h2>
+          <p class="lead">Proyek pribadi, organisasi, digital, dan ide bisnis.</p>
+        </header>
+        <div id="projBody"></div>
+      </div>
+    </section>
+
+    <!-- TARGET -->
+    <section id="target" class="section">
+      <div class="container">
+        <header class="head" data-r>
+          <h2>Perjalanan dan Target</h2>
+          <p class="lead">Rencana kuliah, beasiswa, pengembangan kemampuan, dan karier.</p>
+        </header>
+        <div id="goalBody"></div>
+      </div>
+    </section>
+
+    <!-- KONTAK -->
+    <section id="kontak" class="section contact-section">
+      <div class="container contact">
+        <div class="contact-text" data-r>
+          <h2>Mari Terhubung</h2>
+          <p class="lead">Ada beasiswa, lomba, kolaborasi, atau pekerjaan freelance? Tulis pesan atau hubungi saya langsung.</p>
+          <div id="contactBody"></div>
+        </div>
+        <form class="glass contact-form" id="contactForm" data-r novalidate hidden>
+          <div class="field"><label for="cfName">Nama</label><input id="cfName" name="name" type="text" autocomplete="name" required maxlength="80"></div>
+          <div class="field"><label for="cfEmail">Email Anda</label><input id="cfEmail" name="email" type="email" autocomplete="email" maxlength="120"></div>
+          <div class="field"><label for="cfMsg">Pesan</label><textarea id="cfMsg" name="msg" rows="5" required maxlength="1500"></textarea></div>
+          <p class="form-err" id="cfErr" role="alert" hidden></p>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="cfMail">Kirim lewat Email <svg class="ic arr" aria-hidden="true"><use href="#i-send"/></svg></button>
+            <button class="btn btn-outline" type="button" id="cfWa" hidden>Kirim lewat WhatsApp <svg class="ic arr" aria-hidden="true"><use href="#i-chat"/></svg></button>
+          </div>
+          <p class="note">Pesan dibuka di aplikasi email atau WhatsApp Anda. Isinya tidak disimpan di website ini.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand" href="#beranda" aria-label="Ke beranda"><span class="brand-mark" id="footMark">•</span><span class="brand-name" id="footName2">Portofolio</span></a>
+      <p>© <span id="footYear"></span> <span id="footName"></span>. Semua hak dilindungi.</p>
+      <a class="icon-btn" href="#top" aria-label="Kembali ke atas"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
+    </div>
+  </footer>
+
+  <!-- Halaman detail karya / prestasi / proyek -->
+  <div class="detail-page" id="detailPage" role="dialog" aria-modal="true" aria-labelledby="dTitle" hidden>
+    <div class="container detail-wrap">
+      <button class="back" id="detailBack" type="button"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg><span id="backLabel">Kembali</span></button>
+      <article class="detail-grid" id="detailBody"></article>
+      <section class="d-more" id="detailMore" hidden>
+        <h3>Lihat yang lain</h3>
+        <div class="grid" id="detailMoreGrid"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Pencarian -->
+  <dialog id="searchDlg" aria-label="Pencarian">
+    <button class="icon-btn dlg-close" type="button" data-close aria-label="Tutup"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <div class="search-box">
+      <label for="searchInput" class="sr-only">Cari di seluruh website</label>
+      <input id="searchInput" type="search" placeholder="Cari karya, prestasi, keahlian, pengalaman…" autocomplete="off">
+    </div>
+    <p class="search-hint" id="searchHint">Ketik minimal 2 huruf.</p>
+    <ul class="results" id="searchResults"></ul>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="sample-data.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
