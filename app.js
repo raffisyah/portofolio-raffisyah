@@ -162,7 +162,13 @@
     $("#aboutStats").innerHTML = stats;
 
     var cards = "";
-    if (val(p.character_text)) cards += '<div class="info-card" data-spot data-r><h3>Karakter</h3>' + paragraphs(p.character_text) + "</div>";
+    var chars = splitLines(p.character_text).map(function (line) {
+      var m = line.match(/^(.{1,60}?)\s+[\u2014\u2013-]\s+([\s\S]+)$/) || line.match(/^([^:]{1,60}):\s+([\s\S]+)$/);
+      return m ? { name: m[1], desc: m[2] } : { name: "", desc: line };
+    });
+    if (chars.length) cards += '<div class="info-card info-char" data-spot data-r><h3>Karakter</h3><ul class="char-grid">' + chars.map(function (c) {
+      return '<li class="char-item">' + (c.name ? '<strong class="char-name">' + esc(c.name) + "</strong>" : "") + '<span class="char-desc">' + esc(c.desc) + "</span></li>";
+    }).join("") + "</ul></div>";
     var vals = String(p.values_text || "").split(/\n+/).map(val).filter(Boolean);
     if (vals.length) cards += '<div class="info-card" data-spot data-r><h3>Nilai hidup</h3><ul>' + vals.map(function (v) { return "<li>" + esc(v) + "</li>"; }).join("") + "</ul></div>";
     var ints = splitList(p.interests_text);
