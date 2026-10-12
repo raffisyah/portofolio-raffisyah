@@ -10,7 +10,7 @@
       atau di file mana pun di website. Kunci itu hanya untuk server.
    ===================================================================== */
 window.PORTFOLIO_CONFIG = {
-  SUPABASE_URL: "https://hqvswreskvqejescbcot.supabase.co/rest/v1/",
+  SUPABASE_URL: "https://hqvswreskvqejescbcot.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_FCo-Es-O03wtGz68VDIaSQ_8b9OFH2T",
   STORAGE_BUCKET: "portfolio" // jangan diubah kecuali Anda mengubah nama bucket di SQL
 };
