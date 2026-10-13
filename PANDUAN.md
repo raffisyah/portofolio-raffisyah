@@ -1,4 +1,71 @@
-# PANDUAN: Website Portofolio, Desain Baru (v2)
+# PANDUAN: Fitur Tools & Platforms (v4)
+
+> **Perlu 1 langkah database** (hanya membuat tabel baru, tidak menyentuh data lama). Urutan penting: **jalankan SQL dulu, baru unggah file**. Jika file diunggah lebih dulu, website tetap normal; bagian Tools hanya kosong sampai SQL dijalankan.
+
+## 1. Jalankan SQL (sekali saja)
+1. Supabase → **SQL Editor** → New query.
+2. Buka file `supabase-update-v4-tools.sql`, salin seluruh isinya, tempel, tekan **Run**.
+3. Hasil akhir harus menampilkan 1 baris: `tools_platforms` dengan `rowsecurity = true`.
+SQL ini aman dijalankan berulang. Ia hanya membuat tabel `tools_platforms` dengan aturan keamanan yang sama seperti tabel lain: pengunjung hanya membaca yang tampil, hanya pemilik (`is_owner()`) yang boleh menambah, mengubah, menghapus.
+
+## 2. Unggah file ke GitHub
+Unggah: `index.html`, `app.js`, `style.css`, `admin.html`, `admin.js`, `admin.css`, `sample-data.js`, `PANDUAN.md`, dan `supabase-update-v4-tools.sql` (agar tersimpan di repository). **Jangan timpa `config.js`.** Tunggu Netlify "Published", lalu muat ulang paksa.
+
+## 3. Memakai fitur
+- Dashboard admin → menu **Tools** → **Tambah**: nama, kategori (Design, Video Editing, Web Development, AI, Other), ikon/logo (opsional), deskripsi, tautan, status penggunaan.
+- **Tandai Most Used / Batalkan Most Used**: tombol bintang di tiap baris. Ini pilihan manual Anda; tidak ada persentase kemampuan.
+- **Urutan**: tombol ↑ ↓ di tiap baris, atau isi angka "Urutan tampil" di formulir (angka kecil tampil lebih dulu).
+- **Sembunyikan / Hapus** tersedia seperti bagian lain.
+- Di website: bagian **Tools & Platforms** (setelah Keahlian), dengan filter kategori. Filter hanya menampilkan kategori yang punya isi.
+
+## 4. Uji setelah online
+Tambah satu tool di admin → buka website → tool muncul (muat ulang jika perlu) → tandai Most Used → badge muncul → ↓ urutan berubah → filter kategori berfungsi → buka website tanpa login: tidak ada tombol admin. Coba juga tombol "Kunjungi" (buka tab baru).
+
+## Menu "Tools & Platforms" tidak muncul di Dashboard Admin?
+Penyebab paling umum: file admin belum ikut terunggah atau browser masih memakai versi lama. Pastikan **ketiga** file ini sudah diunggah ke GitHub: `admin.js`, `admin.html`, `admin.css`. Buka `/admin.html` → menu **Akun**: harus tertulis "Versi dashboard: v4-tools". Jika tidak, `admin.js` di website masih versi lama. Muat ulang paksa (atau hapus data situs di Chrome) setelah Netlify "Published". Jika menu muncul tetapi menyimpan gagal dengan pesan "Tabel Tools belum dibuat", jalankan `supabase-update-v4-tools.sql`.
+
+## Batas pengujian
+Diuji dengan Supabase tiruan di Chromium (HP 390 px dan laptop 1440 px). **Belum teruji:** database Supabase asli (SQL v4 belum dijalankan di project Anda), unggah ikon ke Storage asli, HP Android fisik, Safari/Firefox.
+
+---
+
+# PANDUAN: Tema Midnight Navy + Ice Blue (v3.1)
+
+> **Pembaruan warna saja.** Hanya 6 file tampilan yang berubah: `tokens.css`, `style.css`, `admin.css`, `index.html`, `admin.html`, `common.js`. Tanpa SQL, tanpa perubahan database/Auth/RLS/`config.js`. Unggah ke GitHub dengan cara yang sama seperti di bawah.
+
+## Redesain editorial (v3)
+
+> **Redesain ini TIDAK memerlukan SQL apa pun.** Database, Auth, RLS, Storage, `config.js`, dan `netlify.toml` tidak disentuh. Cukup ganti 7 file tampilan (di bawah).
+
+## File yang diubah (hanya ini yang perlu diunggah)
+
+| File | Isi perubahan |
+|---|---|
+| `tokens.css` | Warna navy + aksen ice blue (`--accent`), huruf Bricolage Grotesque, tombol, fokus |
+| `style.css` | Seluruh tampilan publik: header, hero, galeri, tentang, kontak, detail, animasi |
+| `index.html` | Susunan halaman baru. Semua ID lama dipertahankan |
+| `app.js` | Hanya tampilan: kolase hero, tautan menu, kartu. Logika data/filter/cari/detail/formulir tidak diubah |
+| `common.js` | Hanya warna `theme-color` |
+| `admin.html` | Hanya font dan warna |
+| `admin.css` | Dashboard admin mengikuti tema baru. `admin.js` TIDAK berubah |
+
+**Jangan timpa:** `config.js` (berisi kunci Anda), file `.sql`, `netlify.toml`, `admin.js`, `sample-data.js`.
+
+## Langkah menerbitkan (GitHub → Netlify, dari HP)
+1. Buka repository di GitHub → **Add file → Upload files**.
+2. Pilih 7 file di atas (dari hasil ekstrak ZIP). Nama sama = otomatis menggantikan.
+3. **Commit changes**.
+4. Netlify otomatis membangun ulang (±1 menit, lihat tab Deploys sampai "Published").
+5. Buka website, lalu muat ulang paksa (di Chrome Android: menu ⋮ → ikon muat ulang, atau hapus data situs) agar CSS lama tidak tersimpan.
+
+## Daftar uji setelah online
+**Publik:** tidak ada kolom putih/geser ke samping di HP · menu HP buka/tutup · tautan Beranda, Karya, Tentang, Kontak menuju bagian yang benar · kartu karya terbuka ke detail dan tombol Kembali memulihkan posisi · filter kategori dan pencarian berfungsi · gambar tampil · mode terang/gelap · animasi masuk halus.
+**Admin:** `/admin.html` bisa masuk · tambah, ubah, sembunyikan, hapus karya · unggah gambar · keluar lalu masuk lagi.
+**Keamanan:** tanpa login, `/admin.html` hanya menampilkan formulir masuk · tidak ada tombol daftar · akun non-admin ditolak · tidak ada kunci rahasia di kode sumber.
+
+## Catatan keamanan (CSP)
+`netlify.toml` tidak diubah. Tidak ada skrip inline baru, tidak ada `unsafe-eval`.
+
 
 Panduan ini untuk **pemula** dan bisa dikerjakan **hanya dari HP Android**.
 
@@ -116,7 +183,7 @@ Tips:
 
 ## Mengubah tampilan
 
-- **Warna**: `tokens.css`, bagian atas. Ubah `--accent` dan `--accent-2` (ungu-biru), `--bg` (latar).
+- **Warna**: `tokens.css`, bagian atas. Ubah `--accent` (ice blue `#78a9ff`), `--bg` (latar `#080f1e`), `--surface` / `--surface-2` (kartu/panel) di `tokens.css`. Mode terang punya blok sendiri di bawahnya.
 - **Huruf**: variabel `--f` di `tokens.css` dan tautan Google Fonts di `index.html` / `admin.html`.
 - **Animasi**: jika pengunjung mengaktifkan "kurangi gerakan" di perangkatnya, semua animasi otomatis dimatikan dan konten langsung tampil.
 
@@ -129,11 +196,14 @@ Tips:
 | "Ditolak: akun ini tidak punya izin" | Akun belum terdaftar admin (`supabase-jadikan-admin.sql`) atau sesi habis, masuk lagi |
 | Tampilan lama masih muncul | Tunggu Netlify selesai (±1 menit), lalu muat ulang |
 | Gambar tidak tampil | Pastikan tautan diawali `https://` dan bucket `portfolio` ada |
-| Font terlihat berbeda | Font Poppins dimuat dari Google Fonts, perlu internet. Tanpa itu tampil font bawaan HP |
+| Font terlihat berbeda | Font Bricolage Grotesque dimuat dari Google Fonts, perlu internet. Tanpa itu tampil font bawaan HP |
 
 ---
 
 ## Batas pengujian (jujur)
+
+Belum teruji: Supabase asli, HP Android fisik, Safari/iPhone, Firefox, header CSP Netlify asli, dan pemuatan font Google asli (di tes dipakai font cadangan).
+
 
 Saya menguji kode di Chromium otomatis (ukuran HP 390 px, tablet 820 px, laptop 1440 px) dengan **data uji dan Supabase tiruan**. Yang **belum** teruji:
 - Koneksi ke project Supabase **asli** Anda, dan unggahan ke Storage asli
