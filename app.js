@@ -59,6 +59,12 @@
         if (all[i + 1].error) throw all[i + 1].error;
         data[lists[i]] = all[i + 1].data || [];
       }
+      // Tools & Platforms dimuat terpisah: jika tabelnya belum dibuat, bagian lain tetap normal
+      try {
+        var tl = await client.from("tools_platforms").select("*").eq("is_visible", true)
+          .order("sort_order", { ascending: true }).order("created_at", { ascending: false });
+        data.tools_platforms = tl.error ? [] : (tl.data || []);
+      } catch (e2) { data.tools_platforms = []; }
       return { data: data, demo: false };
     } catch (err) {
       console.error("Gagal memuat data dari Supabase:", err);
@@ -186,6 +192,7 @@
     if (!items.length) { host.innerHTML = emptyState(cfg.empty || "Belum ada konten."); return; }
 
     var cats = uniq(items.map(cfg.catOf).map(val).filter(Boolean));
+    if (cfg.catOrder) cats = cfg.catOrder.filter(function (c) { return cats.indexOf(c) > -1; }).concat(cats.filter(function (c) { return cfg.catOrder.indexOf(c) < 0; }));
     var q = "", cat = "Semua", expanded = false;
     var showSearch = cfg.search !== false && items.length > 4;
     var showChips = cats.length > 1;
@@ -320,6 +327,27 @@
       catOf: function (p) { return p.type; },
       textOf: function (p) { return [p.title, p.type, p.status, p.description, p.tags].join(" "); },
       render: function (ls) { return '<div class="grid">' + ls.map(projCard).join("") + "</div>"; }
+    });
+  }
+  var TOOL_CATS = ["Design", "Video Editing", "Web Development", "AI", "Other"];
+  function toolCard(t) {
+    var img = safeUrl(t.image_url), link = safeUrl(t.link_url);
+    var ico = img
+      ? '<span class="tool-ico has-img"><img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"></span>'
+      : '<span class="tool-ico" aria-hidden="true">' + esc(initialOf(t.name)) + "</span>";
+    return '<article class="tool-card' + (t.is_most_used ? " is-top" : "") + '" data-spot data-r>' +
+      '<div class="tool-top">' + ico + '<div class="tool-id"><h3>' + esc(t.name) + "</h3>" + (val(t.category) ? '<span class="tool-cat">' + esc(t.category) + "</span>" : "") + "</div>" +
+      (t.is_most_used ? '<span class="tool-badge">' + icon("star") + "Most Used</span>" : "") + "</div>" +
+      (val(t.description) ? '<p class="clamp">' + esc(t.description) + "</p>" : "") +
+      '<div class="tool-foot">' + (val(t.usage_status) ? '<span class="tool-status">' + esc(t.usage_status) + "</span>" : "<span></span>") +
+      (link ? '<a class="tool-link" href="' + esc(link) + '" target="_blank" rel="noopener noreferrer" aria-label="Buka ' + esc(t.name) + ' (tab baru)">Kunjungi ' + icon("arrow-ur") + "</a>" : "") + "</div></article>";
+  }
+  function renderTools(list) {
+    collection($("#toolsBody"), {
+      items: list, empty: "Tools & Platforms belum ditambahkan.", placeholder: "Cari tools", catOrder: TOOL_CATS,
+      catOf: function (t) { return t.category; },
+      textOf: function (t) { return [t.name, t.category, t.usage_status, t.description].join(" "); },
+      render: function (ls) { return '<div class="tool-grid">' + ls.map(toolCard).join("") + "</div>"; }
     });
   }
   function renderGoals(list) {
@@ -508,6 +536,7 @@
     (d.achievements || []).forEach(function (a) { add("prestasi", "prestasi", "Prestasi", a, a.title, [a.type, a.issuer, a.year].filter(val).join(", "), [a.result, a.description].join(" ")); });
     (d.projects || []).forEach(function (p) { add("proyek", "proyek", "Proyek", p, p.title, [p.type, p.status].filter(val).join(", "), [p.description, p.tags].join(" ")); });
     (d.skills || []).forEach(function (s) { add("", "keahlian", "Keahlian", s, s.name, [s.category, s.level].filter(val).join(", "), s.description); });
+    (d.tools_platforms || []).forEach(function (t) { add("", "tools", "Tools", t, t.name, [t.category, t.usage_status].filter(val).join(", "), t.description); });
     (d.experiences || []).forEach(function (e) { add("", "pengalaman", "Pengalaman", e, e.title, [e.organization, e.category].filter(val).join(", "), e.description); });
     (d.education || []).forEach(function (e) { add("", "pendidikan", "Pendidikan", e, e.institution, [e.level, e.major].filter(val).join(", "), e.description); });
     (d.goals || []).forEach(function (g) { add("", "target", "Target", g, g.title, [g.category, g.target_period].filter(val).join(", "), g.description); });
@@ -548,7 +577,7 @@
      --------------------------------------------------------------- */
   var menuOpen = false;
   // 4 tautan utama di navbar; bagian lain ikut menyalakan induknya
-  var PRIMARY = { beranda: "beranda", karya: "karya", prestasi: "karya", proyek: "karya", tentang: "tentang", pendidikan: "tentang", pengalaman: "tentang", keahlian: "tentang", target: "tentang", kontak: "kontak" };
+  var PRIMARY = { beranda: "beranda", karya: "karya", prestasi: "karya", proyek: "karya", tentang: "tentang", pendidikan: "tentang", pengalaman: "tentang", keahlian: "tentang", tools: "tentang", target: "tentang", kontak: "kontak" };
   var currentSec = "beranda";
 
   function positionIndicator() {
@@ -685,6 +714,7 @@
     renderEducation(DATA.education || []);
     renderExperience(DATA.experiences || []);
     renderSkills(DATA.skills || []);
+    renderTools(DATA.tools_platforms || []);
     renderWorks(DATA.works || []);
     renderAchievements(DATA.achievements || []);
     renderProjects(DATA.projects || []);

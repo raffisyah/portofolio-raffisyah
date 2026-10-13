@@ -30,6 +30,10 @@ window.SAMPLE_DATA = {
     { id: "s1", name: "[ISI: Keahlian, mis. Desain Grafis]", category: "Desain Grafis", level: "", description: "[ISI: Penjelasan singkat dan alat yang dipakai.]" },
     { id: "s2", name: "[ISI: Keahlian lain]", category: "Bahasa", level: "", description: "" }
   ],
+  tools_platforms: [
+    { id: "t1", name: "[ISI: Nama aplikasi]", category: "Design", description: "[ISI: Untuk apa Anda memakainya.]", image_url: "", link_url: "", usage_status: "Aktif digunakan", is_most_used: true },
+    { id: "t2", name: "[ISI: Aplikasi lain]", category: "Other", description: "", image_url: "", link_url: "", usage_status: "Sesekali", is_most_used: false }
+  ],
   works: [
     { id: "w1", title: "[ISI: Judul karya]", category: "Desain", year: "[ISI]", description: "[ISI: Penjelasan karya, tujuan, dan proses pembuatannya.]", image_url: "", gallery_urls: "", file_url: "", link_url: "", tags: "[ISI: tag1], [ISI: tag2]", tools: "[ISI: alat 1], [ISI: alat 2]" }
   ],
