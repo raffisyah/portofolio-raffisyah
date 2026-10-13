@@ -32,6 +32,8 @@
     achType: ["Lomba", "Penghargaan", "Sertifikat", "Beasiswa", "Lainnya"],
     projType: ["Proyek Pribadi", "Proyek Organisasi", "Proyek Digital", "Ide Bisnis", "Lainnya"],
     projStatus: ["Ide", "Sedang Berjalan", "Selesai"],
+    toolCat: ["Design", "Video Editing", "Web Development", "AI", "Other"],
+    toolStatus: ["Aktif digunakan", "Sesekali", "Sedang belajar"],
     goalCat: ["Kuliah", "Beasiswa", "Pengembangan Kemampuan", "Karier", "Lainnya"],
     goalStatus: ["Rencana", "Sedang Dijalani", "Tercapai"],
     platform: [
@@ -159,6 +161,22 @@
       ]
     },
     {
+      key: "tools", label: "Tools & Platforms", icon: "tools", table: "tools_platforms", reorder: true,
+      flag: { field: "is_most_used", on: "Batalkan Most Used", off: "Tandai Most Used", badge: "Most Used" },
+      hint: "Aplikasi dan platform yang Anda pakai. Tombol ↑ ↓ mengatur urutan tampil. “Most Used” Anda tandai sendiri.",
+      titleOf: function (r) { return r.name; },
+      subOf: function (r) { return [r.category, r.usage_status].filter(Boolean).join(", "); },
+      fields: [
+        { name: "name", label: "Nama aplikasi", type: "text", required: true },
+        { name: "category", label: "Kategori", type: "select", options: O.toolCat },
+        { name: "image_url", label: "Ikon atau logo", type: "image", folder: "tools", help: "Opsional. Jika kosong, tampil huruf pertama nama aplikasi." },
+        { name: "description", label: "Deskripsi singkat", type: "textarea", rows: 3 },
+        { name: "link_url", label: "Tautan (opsional)", type: "url", placeholder: "https://…" },
+        { name: "usage_status", label: "Status penggunaan", type: "select", options: O.toolStatus },
+        { name: "is_most_used", label: "Tandai sebagai “Most Used”", type: "checkbox", def: false, help: "Pilihan manual Anda. Badge ini tidak dihitung otomatis." }
+      ]
+    },
+    {
       key: "goals", label: "Target", icon: "target", table: "goals",
       hint: "Rencana kuliah, beasiswa, pengembangan kemampuan, dan target karier.",
       titleOf: function (r) { return r.title; },
@@ -203,6 +221,7 @@
     var m = String((err && (err.message || err.error_description)) || err || "");
     if (err && (err.code === "42501" || /row-level security|permission denied/i.test(m))) return "Ditolak: akun ini tidak punya izin. Pastikan Anda sudah masuk dengan akun admin.";
     if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return "Tidak ada koneksi internet. Coba lagi.";
+    if (/tools_platforms/i.test(m) && (/schema cache|does not exist|Could not find/i.test(m) || (err && (err.code === "42P01" || err.code === "PGRST205")))) return "Tabel Tools belum dibuat. Jalankan supabase-update-v4-tools.sql di Supabase SQL Editor (lihat PANDUAN).";
     if (err && err.code === "42P01") return "Tabel belum dibuat. Jalankan supabase-setup.sql dulu.";
     if (/schema cache|column .* does not exist|PGRST204/i.test(m)) return "Kolom baru belum ada di database. Jalankan supabase-update-v2.sql di Supabase SQL Editor (lihat PANDUAN).";
     return m || "Terjadi kesalahan.";
@@ -410,14 +429,16 @@
      --------------------------------------------------------------- */
   async function renderOverview() {
     var main = $("#adminMain");
-    var tiles = [["works", "Karya"], ["achievements", "Prestasi"], ["projects", "Proyek"], ["skills", "Keahlian"], ["experiences", "Pengalaman"], ["education", "Pendidikan"], ["goals", "Target"]];
+    var tiles = [["works", "Karya"], ["achievements", "Prestasi"], ["projects", "Proyek"], ["skills", "Keahlian"], ["tools_platforms", "Tools & Platforms", "tools"], ["experiences", "Pengalaman"], ["education", "Pendidikan"], ["goals", "Target"]];
     main.innerHTML = '<div class="sec-head"><div><h2>Ringkasan</h2><p class="muted">Gambaran isi website Anda saat ini.</p></div></div>' +
       '<div class="quick"><button class="btn btn-primary" type="button" id="qAddWork">' + icon("plus") + 'Tambah karya</button>' +
+      '<button class="btn btn-outline" type="button" id="qTools">' + icon("tools") + 'Kelola Tools</button>' +
       '<button class="btn btn-outline" type="button" id="qProfile">' + icon("user") + 'Edit profil</button></div>' +
-      '<div class="tiles" id="tiles">' + tiles.map(function (t) { return '<button type="button" class="tile" data-go="' + t[0] + '"><span class="n">…</span><span class="l">' + t[1] + "</span></button>"; }).join("") + "</div>" +
+      '<div class="tiles" id="tiles">' + tiles.map(function (t) { return '<button type="button" class="tile" data-go="' + (t[2] || t[0]) + '"><span class="n">…</span><span class="l">' + t[1] + "</span></button>"; }).join("") + "</div>" +
       '<h3 class="block-title">Karya terbaru</h3><div class="list" id="recent"><p class="muted">Memuat…</p></div>';
 
     $("#qAddWork").addEventListener("click", function () { current = "works"; setCurrentNav(); renderList(secByKey("works")).then(function () { openEditor(secByKey("works"), null); }); });
+    $("#qTools").addEventListener("click", function () { openSection("tools"); });
     $("#qProfile").addEventListener("click", function () { openSection("profile"); });
     $("#tiles").addEventListener("click", function (e) { var t = e.target.closest("[data-go]"); if (t) openSection(t.dataset.go === "works" ? "works" : t.dataset.go); });
 
@@ -472,15 +493,19 @@
     cache[sec.key] = res.data || [];
     if (!cache[sec.key].length) { list.innerHTML = '<div class="empty">Belum ada data. Tekan Tambah untuk mulai.</div>'; return; }
 
-    list.innerHTML = cache[sec.key].map(function (r) {
+    list.innerHTML = cache[sec.key].map(function (r, idx) {
       var thumb = window.safeUrl(r.image_url);
       return '<article class="row"><div class="row-top">' +
         (thumb ? '<img class="row-thumb" src="' + esc(thumb) + '" alt="" loading="lazy">' : "") +
         '<div class="row-main"><strong>' + esc(sec.titleOf(r) || "(tanpa judul)") + "</strong>" +
         (sec.subOf(r) ? "<small>" + esc(sec.subOf(r)) + "</small>" : "") +
+        (sec.flag && r[sec.flag.field] ? '<span class="badge-top">' + icon("star") + esc(sec.flag.badge) + "</span> " : "") +
         (r.is_visible ? "" : '<span class="badge-off">Disembunyikan</span>') + "</div></div>" +
         '<div class="row-actions">' +
+        (sec.reorder ? '<button class="btn btn-outline btn-sm" type="button" data-act="up" data-id="' + esc(r.id) + '" aria-label="Naikkan urutan"' + (idx === 0 ? " disabled" : "") + ">" + icon("up") + '</button>' +
+          '<button class="btn btn-outline btn-sm" type="button" data-act="down" data-id="' + esc(r.id) + '" aria-label="Turunkan urutan"' + (idx === cache[sec.key].length - 1 ? " disabled" : "") + ">" + icon("down") + "</button>" : "") +
         '<button class="btn btn-outline btn-sm" type="button" data-act="edit" data-id="' + esc(r.id) + '">' + icon("edit") + "Edit</button>" +
+        (sec.flag ? '<button class="btn btn-outline btn-sm" type="button" data-act="flag" data-id="' + esc(r.id) + '">' + icon("star") + (r[sec.flag.field] ? sec.flag.on : sec.flag.off) + "</button>" : "") +
         '<button class="btn btn-outline btn-sm" type="button" data-act="toggle" data-id="' + esc(r.id) + '">' + icon(r.is_visible ? "eyeoff" : "eye") + (r.is_visible ? "Sembunyikan" : "Tampilkan") + "</button>" +
         '<button class="btn btn-danger btn-sm" type="button" data-act="del" data-id="' + esc(r.id) + '">' + icon("trash") + "Hapus</button></div></article>";
     }).join("");
@@ -492,7 +517,23 @@
       if (b.dataset.act === "edit") return openEditor(sec, row);
       b.disabled = true;
       try {
-        if (b.dataset.act === "toggle") {
+        if (b.dataset.act === "flag") {
+          var fv = {}; fv[sec.flag.field] = !row[sec.flag.field];
+          var fu = await client.from(sec.table).update(fv).eq("id", row.id);
+          if (fu.error) throw fu.error;
+          toast(fv[sec.flag.field] ? "Ditandai " + sec.flag.badge : "Penanda " + sec.flag.badge + " dibatalkan");
+        } else if (b.dataset.act === "up" || b.dataset.act === "down") {
+          // tukar posisi dengan tetangga, lalu beri ulang nomor urut 10, 20, 30… agar tidak bentrok
+          var arr = cache[sec.key].slice(), at = arr.indexOf(row), to = at + (b.dataset.act === "up" ? -1 : 1);
+          if (to < 0 || to >= arr.length) { b.disabled = false; return; }
+          arr.splice(to, 0, arr.splice(at, 1)[0]);
+          var jobs = [];
+          arr.forEach(function (x, i) { if (x.sort_order !== (i + 1) * 10) jobs.push(client.from(sec.table).update({ sort_order: (i + 1) * 10 }).eq("id", x.id)); });
+          var rs = await Promise.all(jobs);
+          var bad = rs.filter(function (q) { return q.error; })[0];
+          if (bad) throw bad.error;
+          toast("Urutan diperbarui");
+        } else if (b.dataset.act === "toggle") {
           var u = await client.from(sec.table).update({ is_visible: !row.is_visible }).eq("id", row.id);
           if (u.error) throw u.error;
           toast(row.is_visible ? "Disembunyikan dari website" : "Ditampilkan di website");
@@ -530,7 +571,7 @@
      --------------------------------------------------------------- */
   function renderAccount() {
     var main = $("#adminMain");
-    main.innerHTML = '<div class="sec-head"><div><h2>Akun</h2><p class="muted">Ganti kata sandi admin.</p></div></div>' +
+    main.innerHTML = '<div class="sec-head"><div><h2>Akun</h2><p class="muted">Ganti kata sandi admin.</p><p class="muted small">Versi dashboard: v4-tools (menu Tools &amp; Platforms tersedia).</p></div></div>' +
       '<form class="glass form-card" id="pwForm">' +
       '<div class="field"><label for="pw1">Kata sandi baru</label><input id="pw1" name="pw1" type="password" minlength="10" autocomplete="new-password" required><small class="help">Minimal 10 karakter. Gunakan campuran huruf, angka, dan simbol.</small></div>' +
       '<div class="field"><label for="pw2">Ulangi kata sandi baru</label><input id="pw2" name="pw2" type="password" minlength="10" autocomplete="new-password" required></div>' +
