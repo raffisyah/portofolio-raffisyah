@@ -344,3 +344,27 @@ dialog::backdrop { background: var(--scrim); }
   .js .w > span { transform: none !important; }
   .menu-list a { opacity: 1; transform: none; }
 }
+
+/* ---------- Tools & Platforms ---------- */
+.tool-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+.tool-card { display: grid; align-content: start; gap: .85rem; padding: 1.2rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); transition: transform .28s var(--ease), border-color .28s, background-color .28s; }
+@media (hover: hover) { .tool-card:hover { transform: translateY(-4px); border-color: var(--line-2); background: var(--surface-2); } }
+.tool-card:active { transform: scale(.985); }
+.tool-card.is-top { border-color: var(--accent-text); }
+.tool-top { display: flex; align-items: center; gap: .85rem; min-width: 0; }
+.tool-ico { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--accent-text); font-size: 1.5rem; font-weight: 800; font-stretch: 80%; overflow: hidden; }
+.tool-ico.has-img { background: var(--bg-2); padding: 7px; }
+.tool-ico img { width: 100%; height: 100%; object-fit: contain; }
+.tool-id { min-width: 0; flex: 1; display: grid; gap: .1rem; }
+.tool-id h3 { font-size: 1.05rem; font-stretch: 95%; line-height: 1.25; overflow-wrap: anywhere; }
+.tool-cat { color: var(--faint); font-size: .8rem; }
+.tool-badge { flex: none; align-self: start; display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .6rem; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: .7rem; font-weight: 700; white-space: nowrap; }
+.tool-badge .ic { width: 12px; height: 12px; fill: currentColor; stroke-width: 1.4; }
+.tool-card .clamp { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.55; }
+.tool-foot { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-top: .1rem; }
+.tool-status { display: inline-flex; align-items: center; gap: .45rem; color: var(--muted); font-size: .8rem; }
+.tool-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-text); }
+.tool-link { display: inline-flex; align-items: center; gap: .3rem; min-height: 40px; padding: 0 .2rem; color: var(--accent-text); font-size: .86rem; font-weight: 600; text-decoration: none; }
+.tool-link .ic { width: 16px; height: 16px; transition: transform .25s var(--ease); }
+@media (hover: hover) { .tool-link:hover .ic { transform: translate(2px, -2px); } }
+@media (prefers-reduced-motion: reduce) { .tool-card, .tool-link .ic { transition: none; } .tool-card:hover { transform: none; } }
