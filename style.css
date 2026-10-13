@@ -72,18 +72,16 @@ html.lock { overflow: hidden; }
 
 /* kolase */
 .hero-visual { position: relative; width: 100%; max-width: 540px; aspect-ratio: 1 / 1.08; justify-self: center; }
-.frame { position: absolute; margin: 0; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface-2); isolation: isolate; }
+.frame { position: absolute; margin: 0; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); background: linear-gradient(160deg, var(--surface-2), var(--bg-2)); isolation: isolate; }
 .f-photo { right: 0; top: 0; width: 64%; aspect-ratio: 3 / 4; }
 .f-a { left: 0; top: 36%; width: 54%; aspect-ratio: 4 / 3; rotate: -2.5deg; z-index: 2; }
 .f-b { right: 5%; bottom: 0; width: 40%; aspect-ratio: 1; rotate: 2deg; z-index: 3; }
 .frame > img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
-.frame.has-img::before { content: ""; position: absolute; inset: -10%; z-index: -1; background: var(--img) center / cover; filter: blur(18px); opacity: .55; }
 .frame-btn { all: unset; position: relative; display: block; width: 100%; height: 100%; cursor: pointer; }
 .frame-btn:focus-visible { outline: 2px solid var(--accent-text); outline-offset: -4px; }
-.frame-btn img { width: 100%; height: 100%; object-fit: contain; transition: transform .35s var(--ease); }
-@media (hover: hover) { .frame-btn:hover img { transform: scale(1.04); } }
-.frame-btn:active img { transform: scale(.98); }
-.cap { position: absolute; left: 0; right: 0; bottom: 0; padding: .45rem .7rem; background: var(--surface); font-size: .78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.frame-btn img { display: block; width: 100%; height: calc(100% - 2rem); object-fit: contain; transition: opacity .3s var(--ease); }
+@media (hover: hover) { .frame-btn:hover img { opacity: .9; } }
+.cap { position: absolute; left: 0; right: 0; bottom: 0; height: 2rem; display: flex; align-items: center; padding: 0 .7rem; background: var(--surface); font-size: .78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .monogram { width: 100%; height: 100%; display: grid; place-items: center; font-size: clamp(3rem, 12vw, 5.5rem); font-weight: 800; font-stretch: 78%; letter-spacing: -.03em; color: var(--accent-text); }
 .frame.ph-hatch { background-image: repeating-linear-gradient(135deg, transparent 0 9px, var(--line) 9px 10px); }
 .frame.ph-accent { background: var(--accent); border-color: transparent; color: var(--accent-ink); display: grid; place-items: center; }
@@ -226,10 +224,11 @@ html.lock { overflow: hidden; }
 @media (hover: hover) { .card:hover { transform: translateY(-5px); } }
 .card:active { transform: scale(.985); }
 .card:focus-within { outline: 2px solid var(--accent-text); outline-offset: 6px; border-radius: var(--radius); }
-.thumb { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface-2); isolation: isolate; }
-.thumb::before { content: ""; position: absolute; inset: -12%; z-index: -1; background: var(--img) center / cover; filter: blur(22px); opacity: .5; }
-.thumb img { width: 100%; height: 100%; object-fit: contain; transition: transform .35s var(--ease); }  /* contain: gambar tidak terpotong */
-@media (hover: hover) { .card:hover .thumb img { transform: scale(1.035); } }
+/* Area gambar: tinggi seragam, latar navy, gambar SELALU utuh (contain, tanpa zoom yang memotong) */
+.thumb { position: relative; height: clamp(220px, 62vw, 300px); overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); background: linear-gradient(160deg, var(--surface-2), var(--bg-2)); }
+.thumb img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; transition: opacity .3s var(--ease); }
+@media (hover: hover) { .card:hover .thumb img { opacity: .92; } }
+@media (min-width: 960px) { .thumb { height: clamp(250px, 24vw, 340px); } }
 .thumb .ph { position: absolute; inset: 0; display: grid; place-items: center; font-size: 3.4rem; font-weight: 800; font-stretch: 78%; color: var(--accent-text); background: linear-gradient(160deg, var(--ph-from), var(--ph-to)); }
 .card-body { display: grid; gap: .35rem; padding-top: 1rem; }
 .card-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
@@ -248,18 +247,14 @@ html.lock { overflow: hidden; }
 @media (min-width: 640px) and (max-width: 959px) {
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .grid > .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
-  .grid > .card:last-child:nth-child(odd) .thumb { aspect-ratio: 16 / 9; }
 }
 @media (min-width: 960px) {
   .grid { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 3rem 1.5rem; }
   .grid > .card { grid-column: span 4; }
   .grid > .card:nth-child(5n+1) { grid-column: span 7; }
   .grid > .card:nth-child(5n+2) { grid-column: span 5; }
-  .grid > .card:nth-child(5n+1) .thumb { aspect-ratio: 28 / 15; }
   .grid > .card:last-child:nth-child(5n+1), .grid > .card:last-child:nth-child(5n+3) { grid-column: 1 / -1; }
   .grid > .card:last-child:nth-child(5n+4) { grid-column: span 8; }
-  .grid > .card:last-child:nth-child(5n+1) .thumb, .grid > .card:last-child:nth-child(5n+3) .thumb { aspect-ratio: 21 / 9; }
-  .grid > .card:last-child:nth-child(5n+4) .thumb { aspect-ratio: 8 / 3; }
 }
 
 /* ---------- Kontak ---------- */
@@ -297,13 +292,12 @@ html.lock { overflow: hidden; }
 .back:active { transform: scale(.96); }
 .detail-grid { display: grid; gap: 2rem; align-items: start; }
 @media (min-width: 900px) { .detail-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 3.5rem; } .d-info { position: sticky; top: 1.5rem; } }
-.d-main { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); isolation: isolate; display: grid; place-items: center; }
-.d-main::before { content: ""; position: absolute; inset: -10%; z-index: -1; background: var(--img) center / cover; filter: blur(26px); opacity: .5; }
-.d-main img { width: 100%; height: 100%; object-fit: contain; animation: rise .4s ease both; }
+.d-main { position: relative; min-height: 16rem; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: linear-gradient(160deg, var(--surface-2), var(--bg-2)); display: grid; place-items: center; }
+.d-main img { display: block; width: 100%; height: auto; max-height: min(82vh, 52rem); object-fit: contain; animation: rise .4s ease both; }  /* utuh, tanpa dipotong; potret tinggi tetap muat */
 .d-main .ph { font-size: 5rem; font-weight: 800; font-stretch: 78%; color: var(--accent-text); }
 .d-thumbs { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .7rem; }
-.d-thumb { width: 84px; aspect-ratio: 4 / 3; padding: 0; border-radius: var(--radius-s); overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); opacity: .6; transition: opacity .2s, border-color .2s, transform .25s var(--ease); }
-.d-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.d-thumb { width: 84px; aspect-ratio: 4 / 3; padding: 0; border-radius: var(--radius-s); overflow: hidden; border: 1px solid var(--line); background: linear-gradient(160deg, var(--surface-2), var(--bg-2)); opacity: .6; transition: opacity .2s, border-color .2s, transform .25s var(--ease); }
+.d-thumb img { width: 100%; height: 100%; object-fit: contain; }
 @media (hover: hover) { .d-thumb:hover { opacity: 1; transform: translateY(-2px); } }
 .d-thumb:active { transform: scale(.94); }
 .d-thumb[aria-current="true"] { opacity: 1; border-color: var(--accent-text); box-shadow: 0 0 0 1px var(--accent-text); }
@@ -320,7 +314,6 @@ html.lock { overflow: hidden; }
 .d-more h3 { font-size: 1.6rem; margin-bottom: 1.4rem; }
 .d-more .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 2rem 1.4rem; }
 .d-more .grid > .card { grid-column: auto !important; }
-.d-more .grid > .card .thumb { aspect-ratio: 4 / 3 !important; }
 
 /* ---------- Dialog pencarian ---------- */
 dialog { width: min(680px, calc(100vw - 1.5rem)); max-height: calc(100dvh - 2rem); padding: 0; border: 1px solid var(--line-2); border-radius: 14px; background: var(--solid); color: var(--ink); overflow: auto; }

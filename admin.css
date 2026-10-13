@@ -91,7 +91,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-text); }
 .list { display: grid; gap: .65rem; }
 .row { display: grid; gap: .8rem; padding: .95rem 1.1rem; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); }
 .row-top { display: flex; gap: .9rem; align-items: center; min-width: 0; }
-.row-thumb { flex: none; width: 60px; height: 60px; border-radius: 6px; background: var(--bg-2); object-fit: cover; border: 1px solid var(--line); }
+.row-thumb { flex: none; width: 60px; height: 60px; border-radius: 6px; background: var(--bg-2); object-fit: contain; border: 1px solid var(--line); }
 .row-main { min-width: 0; display: grid; gap: .1rem; }
 .row-main strong { font-weight: 500; overflow-wrap: anywhere; }
 .row-main small { color: var(--muted); overflow-wrap: anywhere; }

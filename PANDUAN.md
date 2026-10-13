@@ -1,3 +1,7 @@
+# PANDUAN: Gambar Karya Selalu Utuh (v4.1)
+
+> **Perubahan tampilan saja** pada `style.css` dan `admin.css`. Tanpa SQL, tanpa perubahan database, login, atau Supabase. Gambar karya kini memakai `object-fit: contain` di kartu, halaman detail, galeri kecil, dan kolase beranda, dengan latar navy. Area gambar kartu seragam tingginya, dan di halaman detail gambar tampil besar dan utuh. Efek zoom saat hover dihapus karena bisa memotong tepi gambar.
+
 # PANDUAN: Fitur Tools & Platforms (v4)
 
 > **Perlu 1 langkah database** (hanya membuat tabel baru, tidak menyentuh data lama). Urutan penting: **jalankan SQL dulu, baru unggah file**. Jika file diunggah lebih dulu, website tetap normal; bagian Tools hanya kosong sampai SQL dijalankan.
