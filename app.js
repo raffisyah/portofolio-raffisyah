@@ -120,8 +120,17 @@
     var od = $('meta[property="og:description"]'); if (od && desc) od.setAttribute("content", desc.slice(0, 200));
 
     var ini = window.initials(name);
-    $("#brandName").textContent = name; $("#brandMark").textContent = ini;
-    $("#footName2").textContent = name; $("#footMark").textContent = ini;
+    $("#brandName").textContent = name; $("#footName2").textContent = name;
+    // Logo (opsional): jika ada, menggantikan kotak inisial di navbar saja; jika kosong atau gagal dimuat, tetap inisial
+    var logo = safeUrl(p.logo_url);
+    $("#footMark").textContent = ini;
+    var m = $("#brandMark");
+    m.classList.remove("has-logo"); m.textContent = ini;
+    if (logo) {
+      var im = document.createElement("img");
+      im.alt = ""; im.decoding = "async"; im.src = logo;
+      im.addEventListener("load", function () { m.textContent = ""; m.appendChild(im); m.classList.add("has-logo"); });
+    }
 
     var h1 = $("#heroName");
     h1.setAttribute("aria-label", name);

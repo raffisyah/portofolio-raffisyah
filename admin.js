@@ -465,7 +465,11 @@
     main.innerHTML = '<div class="sec-head"><div><h2>' + esc(sec.label) + '</h2><p class="muted">' + esc(sec.hint) + '</p></div></div><p class="muted">Memuat…</p>';
     var res = await client.from("profile").select("*").eq("id", 1).maybeSingle();
     if (res.error) { toast(explain(res.error), true); return; }
+    // Kolom logo_url baru ada setelah supabase-update-v5-logo.sql dijalankan; sebelum itu, formulir lama tetap aman disimpan
+    var hasLogo = !!(res.data && Object.prototype.hasOwnProperty.call(res.data, "logo_url"));
+    if (hasLogo) sec = Object.assign({}, sec, { fields: [{ name: "logo_url", label: "Logo website", type: "image", folder: "profil", help: "Tampil di pojok kiri atas website, menggantikan kotak inisial (misalnya AS). Disarankan PNG/WebP transparan, tinggi sekitar 100 px atau lebih. Kosongkan untuk kembali ke inisial." }].concat(sec.fields) });
     main.innerHTML = '<div class="sec-head"><div><h2>' + esc(sec.label) + '</h2><p class="muted">' + esc(sec.hint) + "</p></div></div>" +
+      (hasLogo ? "" : '<p class="msg" style="background:var(--surface-2);color:var(--muted)">Fitur logo belum aktif. Untuk mengaktifkannya jalankan <code>supabase-update-v5-logo.sql</code> di Supabase SQL Editor, lalu buka ulang halaman ini.</p>') +
       '<form class="glass form-card" id="profileForm">' + formHtml(sec, res.data) + '<button class="btn btn-primary block" type="submit">Simpan profil</button></form>';
     var form = $("#profileForm");
     bindUploads(form);
@@ -571,7 +575,7 @@
      --------------------------------------------------------------- */
   function renderAccount() {
     var main = $("#adminMain");
-    main.innerHTML = '<div class="sec-head"><div><h2>Akun</h2><p class="muted">Ganti kata sandi admin.</p><p class="muted small">Versi dashboard: v4-tools (menu Tools &amp; Platforms tersedia).</p></div></div>' +
+    main.innerHTML = '<div class="sec-head"><div><h2>Akun</h2><p class="muted">Ganti kata sandi admin.</p><p class="muted small">Versi dashboard: v5-logo (Tools &amp; Platforms dan Logo tersedia).</p></div></div>' +
       '<form class="glass form-card" id="pwForm">' +
       '<div class="field"><label for="pw1">Kata sandi baru</label><input id="pw1" name="pw1" type="password" minlength="10" autocomplete="new-password" required><small class="help">Minimal 10 karakter. Gunakan campuran huruf, angka, dan simbol.</small></div>' +
       '<div class="field"><label for="pw2">Ulangi kata sandi baru</label><input id="pw2" name="pw2" type="password" minlength="10" autocomplete="new-password" required></div>' +
