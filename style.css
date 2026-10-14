@@ -353,3 +353,7 @@ dialog::backdrop { background: var(--scrim); }
 .tool-link .ic { width: 16px; height: 16px; transition: transform .25s var(--ease); }
 @media (hover: hover) { .tool-link:hover .ic { transform: translate(2px, -2px); } }
 @media (prefers-reduced-motion: reduce) { .tool-card, .tool-link .ic { transition: none; } .tool-card:hover { transform: none; } }
+
+/* Lokasi Google Maps (Riwayat Pendidikan) */
+.tl-card .tl-loc { justify-self:start; display:inline-flex; align-items:center; min-height:32px; margin-top:.2rem; font-size:.82rem; color:var(--accent-text); text-decoration:none; border-bottom:1px solid transparent; }
+.tl-card .tl-loc:hover, .tl-card .tl-loc:focus-visible { border-bottom-color:currentColor; }

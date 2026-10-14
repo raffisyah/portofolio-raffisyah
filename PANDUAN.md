@@ -1,3 +1,27 @@
+# PANDUAN: Lokasi Google Maps di Riwayat Pendidikan (v6)
+
+> **Hanya menambah tulisan kecil "Lihat Lokasi"** pada riwayat pendidikan yang punya link Maps. Nama institusi, periode, tata letak, warna, animasi, logo, login, dan fitur lain tidak diubah. Perlu 1 langkah SQL kecil (menambah kolom kosong `maps_url` di tabel `education`, tidak menghapus apa pun).
+>
+> 1. Supabase → SQL Editor → jalankan `supabase-update-v6-maps.sql`.
+> 2. Unggah `app.js`, `admin.js`, `style.css` ke GitHub (root repository, jangan timpa `config.js`).
+> 3. Admin → **Pendidikan** → Edit/Tambah → isi **Link Google Maps (opsional)** → **Simpan**.
+> Kosongkan kolom itu untuk menyembunyikan "Lihat Lokasi". Hanya link http/https yang ditampilkan.
+
+---
+
+# PANDUAN: Logo di Pojok Kiri Atas (v5)
+
+> **Hanya mengganti kotak biru inisial (mis. "AS") di navbar** dengan logo Anda. Footer, favicon, nama, dan bagian lain tidak diubah. Perlu 1 langkah SQL kecil (menambah kolom `logo_url` di tabel `profile`, tidak menghapus apa pun).
+>
+> 1. Supabase → SQL Editor → jalankan `supabase-update-v5-logo.sql`.
+> 2. Unggah `app.js`, `style.css`, `admin.js` ke GitHub (root repository, jangan timpa `config.js`).
+> 3. Dashboard admin → **Profil** → kolom **Logo website** paling atas → pilih gambar (PNG/WebP transparan terbaik) → **Simpan profil**.
+> Kosongkan kolom itu untuk kembali ke inisial. Jika gambar gagal dimuat, inisial otomatis tampil.
+
+# PANDUAN: Hero Bersih, Tanpa Kartu Karya Ganda (v4.2)
+
+> **Perubahan tampilan saja** pada `index.html`, `app.js`, dan `style.css`. Dua kartu karya kecil yang menumpuk di samping foto/inisial hero dihapus (beserta kode dan CSS khususnya). Foto profil (atau inisial jika belum ada foto) tetap tampil. Daftar "Karya Pilihan" dan seluruh data karya tidak berubah. Tanpa SQL, tanpa perubahan database, login, atau admin.
+
 # PANDUAN: Gambar Karya Selalu Utuh (v4.1)
 
 > **Perubahan tampilan saja** pada `style.css` dan `admin.css`. Tanpa SQL, tanpa perubahan database, login, atau Supabase. Gambar karya kini memakai `object-fit: contain` di kartu, halaman detail, galeri kecil, dan kolase beranda, dengan latar navy. Area gambar kartu seragam tingginya, dan di halaman detail gambar tampil besar dan utuh. Efek zoom saat hover dihapus karena bisa memotong tepi gambar.

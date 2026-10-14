@@ -260,7 +260,8 @@
     return '<li class="tl-item" data-r><span class="tl-dot"></span><div class="tl-card" data-spot>' +
       (o.meta ? '<div class="tl-meta">' + esc(o.meta) + "</div>" : "") +
       "<h3>" + esc(o.title) + "</h3>" + (o.sub ? '<p class="tl-sub">' + esc(o.sub) + "</p>" : "") +
-      (o.badge ? '<span class="badge">' + esc(o.badge) + "</span>" : "") + paragraphs(o.desc) + "</div></li>";
+      (o.badge ? '<span class="badge">' + esc(o.badge) + "</span>" : "") + paragraphs(o.desc) +
+         (safeUrl(o.link) ? '<a class="tl-loc" href="' + esc(safeUrl(o.link)) + '" target="_blank" rel="noopener noreferrer">Lihat Lokasi</a>' : "") + "</div></li>";
   }
 
   function renderEducation(list) {
@@ -268,7 +269,7 @@
       items: list, empty: "Riwayat pendidikan belum diisi.", search: false,
       catOf: function () { return ""; },
       textOf: function (e) { return [e.institution, e.level, e.major, e.description].join(" "); },
-      render: function (ls) { return '<ol class="timeline">' + ls.map(function (e) { return tlItem({ meta: period(e.start_year, e.end_year), title: e.institution, sub: e.major, badge: e.level, desc: e.description }); }).join("") + "</ol>"; }
+      render: function (ls) { return '<ol class="timeline">' + ls.map(function (e) { return tlItem({ meta: period(e.start_year, e.end_year), title: e.institution, sub: e.major, badge: e.level, desc: e.description, link: e.maps_url }); }).join("") + "</ol>"; }
     });
   }
 

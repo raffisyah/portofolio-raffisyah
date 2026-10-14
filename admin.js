@@ -83,7 +83,10 @@
         { name: "start_year", label: "Tahun mulai", type: "text", placeholder: "Contoh: 2021" },
         { name: "end_year", label: "Tahun selesai", type: "text", placeholder: "Contoh: 2024 atau Sekarang" },
         { name: "description", label: "Cerita atau pengalaman belajar", type: "textarea" }
-      ]
+      ],
+      // Kolom maps_url baru ada setelah supabase-update-v6-maps.sql dijalankan; sebelum itu, formulir lama tetap aman disimpan
+      optional: { name: "maps_url", before: "description", sql: "supabase-update-v6-maps.sql",
+        field: { name: "maps_url", label: "Link Google Maps (opsional)", type: "url", placeholder: "https://maps.app.goo.gl/…", help: "Di Google Maps: buka lokasi, tekan Bagikan, salin link, lalu tempel di sini. Kosongkan jika tidak perlu. Di website tampil sebagai tulisan kecil “Lihat Lokasi”." } }
     },
     {
       key: "experiences", label: "Pengalaman", icon: "briefcase", table: "experiences",
@@ -487,7 +490,18 @@
      --------------------------------------------------------------- */
   async function renderList(sec) {
     var main = $("#adminMain");
-    main.innerHTML = '<div class="sec-head"><div><h2>' + esc(sec.label) + '</h2><p class="muted">' + esc(sec.hint) + '</p></div>' +
+    var optNote = "";
+    if (sec.optional) {
+      var o = sec.optional, probe = await client.from(sec.table).select(o.name).limit(1);
+      if (!probe.error) {
+        var fl = sec.fields.slice(), at = fl.findIndex(function (f) { return f.name === o.before; });
+        if (at < 0) at = fl.length;
+        sec = Object.assign({}, sec, { fields: fl.slice(0, at).concat([o.field], fl.slice(at)) });
+      } else {
+        optNote = '<p class="muted" style="margin-top:.4rem">Kolom opsional “' + esc(o.field.label) + '” belum aktif. Jalankan file ' + esc(o.sql) + ' di Supabase SQL Editor untuk mengaktifkannya.</p>';
+      }
+    }
+    main.innerHTML = '<div class="sec-head"><div><h2>' + esc(sec.label) + '</h2><p class="muted">' + esc(sec.hint) + '</p>' + optNote + '</div>' +
       '<button class="btn btn-primary" type="button" id="addBtn">' + icon("plus") + 'Tambah</button></div><div class="list" id="list"><p class="muted">Memuat…</p></div>';
     $("#addBtn").addEventListener("click", function () { openEditor(sec, null); });
 
