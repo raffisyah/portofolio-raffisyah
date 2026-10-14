@@ -494,7 +494,7 @@
     if (sec.optional) {
       var o = sec.optional, probe = await client.from(sec.table).select(o.name).limit(1);
       if (!probe.error) {
-        var fl = sec.fields.slice(), at = fl.findIndex(function (f) { return f.name === o.before; });
+        var fl = sec.fields.filter(function (f) { return f.name !== o.name; }), at = fl.findIndex(function (f) { return f.name === o.before; });
         if (at < 0) at = fl.length;
         sec = Object.assign({}, sec, { fields: fl.slice(0, at).concat([o.field], fl.slice(at)) });
       } else {
