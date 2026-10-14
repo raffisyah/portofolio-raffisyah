@@ -671,37 +671,11 @@
     $("#themeBtn").addEventListener("click", window.toggleTheme);
   }
 
-  /* Kolase hero: foto profil + dua karya (hanya yang punya gambar). Tanpa data, tampil bingkai grafis polos. */
-  function renderCollage(d) {
-    var works = (d.works || []).filter(function (w) { return safeUrl(w.image_url); }).slice(0, 2);
-    [{ el: $("#heroFrameA"), ph: "ph-hatch" }, { el: $("#heroFrameB"), ph: "ph-accent" }].forEach(function (s, i) {
-      var el = s.el, w = works[i];
-      el.classList.remove("has-img", "ph-hatch", "ph-accent");
-      el.style.removeProperty("--img");
-      if (w) {
-        var u = safeUrl(w.image_url);
-        el.classList.add("has-img");
-        el.style.setProperty("--img", "url('" + cssUrl(u) + "')");
-        el.removeAttribute("aria-hidden");
-        el.innerHTML = '<button type="button" class="frame-btn" data-hero-work="' + esc(w.id) + '" aria-label="Buka karya ' + esc(w.title) + '">' +
-          '<img src="' + esc(u) + '" alt="" decoding="async"><span class="cap">' + esc(w.title) + "</span></button>";
-      } else {
-        el.classList.add(s.ph);
-        el.setAttribute("aria-hidden", "true");
-        el.innerHTML = i === 1 ? icon("arrow-ur") : "";
-      }
-    });
-    guardImages($("#heroVisual"));
-  }
-
   /* ---------------------------------------------------------------
      9. MULAI
      --------------------------------------------------------------- */
   async function init() {
     setupDetail(); setupSearch(); setupMenu(); setupScroll(); setupContactForm();
-    $("#heroVisual").addEventListener("click", function (e) {
-      var b = e.target.closest("[data-hero-work]"); if (b) goDetail("karya", b.dataset.heroWork);
-    });
     observeReveal(document);
 
     var res = await loadData();
@@ -709,7 +683,6 @@
     $("#demoBar").hidden = !DEMO;
 
     renderHero(DATA.profile || {}, DATA.contact_links || []);
-    renderCollage(DATA);
     renderAbout(DATA.profile || {}, DATA);
     renderEducation(DATA.education || []);
     renderExperience(DATA.experiences || []);
